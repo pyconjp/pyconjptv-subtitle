@@ -22,9 +22,11 @@ $ . env/bin/activate
 [youtube] Extracting URL: https://www.youtube.com/watch?v=6gqyEktNU0Q
 [youtube] 6gqyEktNU0Q: Downloading webpage
 [youtube] 6gqyEktNU0Q: Downloading android player API JSON
+[youtube] 6gqyEktNU0Q: Downloading MPD manifest
+[youtube] 6gqyEktNU0Q: Downloading MPD manifest
 [info] 6gqyEktNU0Q: Downloading 1 format(s): 251
-[download] pyconjptv24.webm has already been downloaded
-[download] 100% of   44.17MiB
+[download] Destination: pyconjptv24.webm
+[download] 100% of   44.17MiB in 00:00:01 at 33.31MiB/s
 --- transcribe audio file ---
 /Users/takanori/Private/pyconjp/pyconjptv-subtitle/env/lib/python3.10/site-packages/whisper/transcribe.py:79: UserWarning: FP16 is not supported on CPU; using FP32 instead
   warnings.warn("FP16 is not supported on CPU; using FP32 instead")
