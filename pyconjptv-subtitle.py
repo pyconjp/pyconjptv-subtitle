@@ -13,7 +13,11 @@ from urllib.request import urlopen
 
 import yt_dlp
 from whisper import load_model
-from whisper.utils import write_srt
+from whisper.utils import get_writer
+
+
+AUDIO_DIR = "audio"
+SUBTITLE_DIR = "subtitle"
 
 
 def download_webm(url: str, webm: str) -> int:
@@ -36,16 +40,14 @@ def generate_srt(audio_file: str) -> None:
     result = model.transcribe(audio_file, verbose=True, language="japanese")
 
     # 結果をsrtファイルに出力
-    base, _ = audio_file.rsplit(".", 1)
-    srt_file = Path(f"{base}.srt")
-    with srt_file.open(mode="w", encoding="utf-8") as srt:
-        write_srt(result["segments"], file=srt)
+    writer = get_writer("srt", SUBTITLE_DIR)
+    writer(result, audio_file)
 
 
 def main(num: str) -> None:
     # 実行中の状態を出力するために標準出力、エラー出力を行バッファリングにする
-    sys.stdout.reconfigure(line_buffering=True)
-    sys.stderr.reconfigure(line_buffering=True)
+    # sys.stdout.reconfigure(line_buffering=True)
+    # sys.stderr.reconfigure(line_buffering=True)
 
     # PyCon JP TVのWebページからyoutubeのURLを取得
     url = f"https://tv.pycon.jp/episode/{num}.html"
@@ -63,7 +65,7 @@ def main(num: str) -> None:
         return
 
     basename = f"pyconjptv{num}"
-    webm = f"{basename}.webm"
+    webm = f"{AUDIO_DIR}/{basename}.webm"
     error_code = download_webm(youtube_url, webm)
 
     # whisperで字幕をsrtファイルに生成
