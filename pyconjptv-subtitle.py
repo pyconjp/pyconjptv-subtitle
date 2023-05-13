@@ -45,10 +45,6 @@ def generate_srt(audio_file: str) -> None:
 
 
 def main(num: str) -> None:
-    # 実行中の状態を出力するために標準出力、エラー出力を行バッファリングにする
-    # sys.stdout.reconfigure(line_buffering=True)
-    # sys.stderr.reconfigure(line_buffering=True)
-
     # PyCon JP TVのWebページからyoutubeのURLを取得
     url = f"https://tv.pycon.jp/episode/{num}.html"
     try:
