@@ -7,7 +7,6 @@ usage: python -u pyconjptv-subtitle.py 24
 
 import re
 import sys
-from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
@@ -41,7 +40,8 @@ def generate_srt(audio_file: str) -> None:
 
     # 結果をsrtファイルに出力
     writer = get_writer("srt", SUBTITLE_DIR)
-    writer(result, audio_file)
+    options = {"max_line_width": None, "max_line_count": None, "highlight_words": None}
+    writer(result, audio_file, options)
 
 
 def main(num: str) -> None:
