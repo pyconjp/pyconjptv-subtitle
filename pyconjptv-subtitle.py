@@ -35,13 +35,13 @@ def download_webm(url: str, webm: str) -> int:
 def generate_srt(audio_file: str) -> None:
     """whisperで音声ファイルから字幕生成"""
     print("--- transcribe audio file ---")
-    model = load_model("large-v2")
+    model = load_model("large-v3")
     result = model.transcribe(audio_file, verbose=True, language="japanese")
 
     # 結果をsrtファイルに出力
     writer = get_writer("srt", SUBTITLE_DIR)
     options = {"max_line_width": None, "max_line_count": None, "highlight_words": None}
-    writer(result, audio_file, options)
+    writer(result, audio_file, **options)
 
 
 def main(num: str) -> None:

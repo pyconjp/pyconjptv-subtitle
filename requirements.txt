@@ -1,2 +1,2 @@
-openai-whisper==20230918
-yt-dlp==2023.10.13
+openai-whisper==20231117
+yt-dlp==2023.11.16
