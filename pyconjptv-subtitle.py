@@ -7,12 +7,18 @@ usage: python -u pyconjptv-subtitle.py 24
 
 import re
 import sys
+from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import urlopen
 
 import yt_dlp
+
 from whisper import load_model
 from whisper.utils import get_writer
+
+if sys.platform == "darwin":
+    import mlx_whisper
+    from mlx_whisper.writers import get_writer as mlx_get_writer
 
 
 AUDIO_DIR = "audio"
@@ -32,16 +38,36 @@ def download_webm(url: str, webm: str) -> int:
     return error_code
 
 
-def generate_srt(audio_file: str) -> None:
+def generate_srt_mlx(audio_file: str) -> None:
+    """mlx-whisperで音声ファイルから字幕生成"""
+    print("--- transcribe audio file ---")
+    model = "mlx-community/whisper-large-v3-turbo"
+    result = mlx_whisper.transcribe(audio_file, verbose=True, language="japanese",
+                                    path_or_hf_repo=model)
+
+    # 結果をsrtファイルに出力
+    writer = mlx_get_writer("srt", SUBTITLE_DIR)
+    writer(result, audio_file)
+
+
+def generate_srt_whisper(audio_file: str) -> None:
     """whisperで音声ファイルから字幕生成"""
     print("--- transcribe audio file ---")
-    model = load_model("large-v3")
+    model = load_model("large-v3-turbo")
     result = model.transcribe(audio_file, verbose=True, language="japanese")
 
     # 結果をsrtファイルに出力
     writer = get_writer("srt", SUBTITLE_DIR)
     options = {"max_line_width": None, "max_line_count": None, "highlight_words": None}
     writer(result, audio_file, **options)
+
+
+def generate_srt(audio_file: str) -> None:
+    """音声ファイルから字幕生成"""
+    if sys.platform == "darwin":
+        generate_srt_mlx(audio_file)
+    else:
+        generate_srt_whisper(audio_file)
 
 
 def main(num: str) -> None:
